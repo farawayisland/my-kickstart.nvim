@@ -1049,5 +1049,13 @@ require('lazy').setup({
 
 -- Neovide configurations which are not already configured in ~/.config/neovide/config.toml
 if vim.g.neovide then
+    -- Animation trail size | https://neovide.dev/configuration.html#animation-trail-size
+    vim.g.neovide_cursor_trail_size = 1.0
+    -- Fullscreen | https://neovide.dev/configuration.html#fullscreen
     vim.g.neovide_fullscreen = true
+    -- GUI cursor options | https://neovim.io/doc/user/options.html#'guicursor'
+    vim.opt.guicursor = {
+        'n-v-c:block',
+        'i:block-blinkwait100-blinkoff350-blinkon350'
+    }
 end
