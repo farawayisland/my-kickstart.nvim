@@ -1047,6 +1047,13 @@ require('lazy').setup({
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 
+-- [[ Additional Keymaps ]]
+-- Sources:
+-- https://vi.stackexchange.com/a/18081
+vim.keymap.set('c', 'kj', '<C-C>', { desc = 'Exit command mode' })
+vim.keymap.set('i', 'kj', '<Esc>', { desc = 'Exit insert mode' })
+vim.keymap.set('v', 'kj', '<Esc>', { desc = 'Exit visual mode' })
+
 -- Neovide configurations which are not already configured in ~/.config/neovide/config.toml
 if vim.g.neovide then
     -- Animation trail size | https://neovide.dev/configuration.html#animation-trail-size
