@@ -1,6 +1,6 @@
 .DS_Store
 .luarc.json
-LICENSE
+LICENSE.md
 nvim
 spell/
 tags
