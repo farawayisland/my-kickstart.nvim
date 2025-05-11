@@ -102,7 +102,7 @@ vim.g.have_nerd_font = true
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.opt.relativenumber = true
+vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -876,57 +876,57 @@ require('lazy').setup({
     'catppuccin/nvim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
-        require('catppuccin').setup({
-            flavour = 'auto', -- latte, frappe, macchiato, mocha
-            background = { -- :h background
-                light = 'latte',
-                dark = 'mocha',
-            },
-            transparent_background = false, -- disables setting the background color.
-            show_end_of_buffer = false, -- shows the '~' characters after the end of buffers
-            term_colors = false, -- sets terminal colors (e.g. `g:terminal_color_0`)
-            dim_inactive = {
-                enabled = false, -- dims the background color of inactive window
-                shade = 'dark',
-                percentage = 0.15, -- percentage of the shade to apply to the inactive window
-            },
-            no_italic = false, -- Force no italic
-            no_bold = false, -- Force no bold
-            no_underline = false, -- Force no underline
-            styles = { -- Handles the styles of general hi groups (see `:h highlight-args`):
-                comments = { 'italic' }, -- Change the style of comments
-                conditionals = { 'italic' },
-                loops = {},
-                functions = {},
-                keywords = {},
-                strings = {},
-                variables = {},
-                numbers = {},
-                booleans = {},
-                properties = {},
-                types = {},
-                operators = {},
-                -- miscs = {}, -- Uncomment to turn off hard-coded styles
-            },
-            color_overrides = {},
-            custom_highlights = {},
-            default_integrations = true,
-            integrations = {
-                cmp = true,
-                gitsigns = true,
-                nvimtree = true,
-                treesitter = true,
-                notify = false,
-                mini = {
-                    enabled = true,
-                    indentscope_color = '',
-                },
-                -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
-            },
-        })
-        
-        -- setup must be called before loading
-        vim.cmd.colorscheme 'catppuccin'
+      require('catppuccin').setup {
+        flavour = 'auto', -- latte, frappe, macchiato, mocha
+        background = { -- :h background
+          light = 'latte',
+          dark = 'mocha',
+        },
+        transparent_background = false, -- disables setting the background color.
+        show_end_of_buffer = false, -- shows the '~' characters after the end of buffers
+        term_colors = false, -- sets terminal colors (e.g. `g:terminal_color_0`)
+        dim_inactive = {
+          enabled = false, -- dims the background color of inactive window
+          shade = 'dark',
+          percentage = 0.15, -- percentage of the shade to apply to the inactive window
+        },
+        no_italic = false, -- Force no italic
+        no_bold = false, -- Force no bold
+        no_underline = false, -- Force no underline
+        styles = { -- Handles the styles of general hi groups (see `:h highlight-args`):
+          comments = { 'italic' }, -- Change the style of comments
+          conditionals = { 'italic' },
+          loops = {},
+          functions = {},
+          keywords = {},
+          strings = {},
+          variables = {},
+          numbers = {},
+          booleans = {},
+          properties = {},
+          types = {},
+          operators = {},
+          -- miscs = {}, -- Uncomment to turn off hard-coded styles
+        },
+        color_overrides = {},
+        custom_highlights = {},
+        default_integrations = true,
+        integrations = {
+          cmp = true,
+          gitsigns = true,
+          nvimtree = true,
+          treesitter = true,
+          notify = false,
+          mini = {
+            enabled = true,
+            indentscope_color = '',
+          },
+          -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
+        },
+      }
+
+      -- setup must be called before loading
+      vim.cmd.colorscheme 'catppuccin'
     end,
   },
 
@@ -1052,17 +1052,33 @@ require('lazy').setup({
 -- https://vi.stackexchange.com/a/18081
 vim.keymap.set('c', 'kj', '<C-C>', { desc = 'Exit command mode' })
 vim.keymap.set('i', 'kj', '<Esc>', { desc = 'Exit insert mode' })
+vim.keymap.set('n', '<leader>bb', '<C-^>', { desc = 'Toggle buffer (switch between current and last buffer)' })
+vim.keymap.set('n', '<leader>bd', ':bd<CR>', { desc = 'Close buffer' })
+vim.keymap.set('n', '<leader>bh', ':new<CR>', { desc = 'Create new horizontally split window' })
+vim.keymap.set('n', '<leader>bk', ':bd!<CR>', { desc = 'Kill buffer' })
+vim.keymap.set('n', '<leader>bn', ':bn<CR>', { desc = 'Go to next buffer' })
+vim.keymap.set('n', '<leader>bp', ':bp<CR>', { desc = 'Go to previous buffer' })
+vim.keymap.set('n', '<leader>bv', ':vnew<CR>', { desc = 'Create new vertically split window' })
+vim.keymap.set('n', '<leader>n', ':set number relativenumber! relativenumber?<CR>', { desc = 'Toggle hybrid line numbers' })
+vim.keymap.set('n', '<leader>w', ':set wrap! wrap?<CR>', { desc = 'Toggle line wrap' })
+vim.keymap.set('t', 'kj', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 vim.keymap.set('v', 'kj', '<Esc>', { desc = 'Exit visual mode' })
 
--- Neovide configurations which are not already configured in ~/.config/neovide/config.toml
+-- [[ Indentation ]]
+vim.opt.expandtab = false
+vim.opt.shiftwidth = 4
+vim.opt.softtabstop = 4
+vim.opt.tabstop = 4
+
+-- [[ Neovide configurations which are not already configured in ~/.config/neovide/config.toml ]]
 if vim.g.neovide then
-    -- Animation trail size | https://neovide.dev/configuration.html#animation-trail-size
-    vim.g.neovide_cursor_trail_size = 1.0
-    -- Fullscreen | https://neovide.dev/configuration.html#fullscreen
-    vim.g.neovide_fullscreen = true
-    -- GUI cursor options | https://neovim.io/doc/user/options.html#'guicursor'
-    vim.opt.guicursor = {
-        'n-v-c:block',
-        'i:block-blinkwait100-blinkoff350-blinkon350'
-    }
+  -- Animation trail size | https://neovide.dev/configuration.html#animation-trail-size
+  vim.g.neovide_cursor_trail_size = 1.0
+  -- Fullscreen | https://neovide.dev/configuration.html#fullscreen
+  vim.g.neovide_fullscreen = true
+  -- GUI cursor options | https://neovim.io/doc/user/options.html#'guicursor'
+  vim.opt.guicursor = {
+    'n-v-c:block',
+    'i:block-blinkwait100-blinkoff350-blinkon350',
+  }
 end
