@@ -1058,25 +1058,79 @@ require('lazy').setup({
 -- [[ Additional Keymaps ]]
 -- Sources:
 -- https://vi.stackexchange.com/a/18081
-vim.keymap.set('c', 'kj', '<C-C>', { desc = 'Exit command mode' })
+-- Command mode
+vim.keymap.set('c', 'kj', '<C-c>', { desc = 'Exit command mode' })
+vim.keymap.set('c', '˙', '<Left>', { desc = 'Move leftward in command mode (macOS: Option-h)' })
+vim.keymap.set('c', '∆', '<C-n>', { desc = 'Recall more recent command-line from history in command mode (macOS: Option-j)' })
+vim.keymap.set('c', '˚', '<C-p>', { desc = 'Recall older command-line from history in command mode (macOS: Option-k)' })
+vim.keymap.set('c', '¬', '<Right>', { desc = 'Move rightward in command mode (macOS: Option-l)' })
+vim.keymap.set('c', 'Ó', '<S-Left>', { desc = 'Move one word backward in command mode (macOS: Shift-Option-h)' })
+vim.keymap.set('c', 'Ò', '<S-Right>', { desc = 'Move one word forward in insert mode (macOS: Shift-Option-l)' })
+-- Insert mode
 vim.keymap.set('i', 'kj', '<Esc>', { desc = 'Exit insert mode' })
-vim.keymap.set('n', '<leader>bb', '<C-^>', { desc = 'Toggle buffer (switch between current and last buffer)' })
-vim.keymap.set('n', '<leader>bd', ':bd<CR>', { desc = 'Close buffer' })
-vim.keymap.set('n', '<leader>bh', ':new<CR>', { desc = 'Create new horizontally split window' })
-vim.keymap.set('n', '<leader>bk', ':bd!<CR>', { desc = 'Kill buffer' })
+vim.keymap.set('i', '˙', '<Left>', { desc = 'Move leftward in insert mode (macOS: Option-h)' })
+vim.keymap.set('i', '∆', '<Down>', { desc = 'Move downward in insert mode (macOS: Option-j)' })
+vim.keymap.set('i', '˚', '<Up>', { desc = 'Move upward in insert mode (macOS: Option-k)' })
+vim.keymap.set('i', '¬', '<Right>', { desc = 'Move rightward in insert mode (macOS: Option-l)' })
+vim.keymap.set('i', 'Ó', '<S-Left>', { desc = 'Move one word backward in insert mode (macOS: Shift-Option-h)' })
+vim.keymap.set('i', 'Ò', '<S-Right>', { desc = 'Move one word forward in insert mode (macOS: Shift-Option-l)' })
+-- Normal mode
+vim.keymap.set('n', '<leader>1', '1gt', { desc = 'Go to 1st tab' })
+vim.keymap.set('n', '<leader>2', '2gt', { desc = 'Go to 2nd tab' })
+vim.keymap.set('n', '<leader>3', '3gt', { desc = 'Go to 3rd tab' })
+vim.keymap.set('n', '<leader>4', '4gt', { desc = 'Go to 4th tab' })
+vim.keymap.set('n', '<leader>5', '5gt', { desc = 'Go to 5th tab' })
+vim.keymap.set('n', '<leader>6', '6gt', { desc = 'Go to 6th tab' })
+vim.keymap.set('n', '<leader>7', '7gt', { desc = 'Go to 7th tab' })
+vim.keymap.set('n', '<leader>8', '8gt', { desc = 'Go to 8th tab' })
+vim.keymap.set('n', '<leader>9', '9gt', { desc = 'Go to 9th tab' })
+vim.keymap.set('n', '<leader>bb', '<C-^>', { desc = 'Switch between current and last buffer' })
+vim.keymap.set('n', '<leader>bd', ':bd<CR>', { desc = 'Delete current buffer' })
+vim.keymap.set('n', '<leader>bdh', ':bp<bar>sp<bar>bn<bar>bd<CR>', { desc = 'then open previous buffer and keep current horizontally split window' })
+vim.keymap.set('n', '<leader>bdv', ':bp<bar>vsp<bar>bn<bar>bd<CR>', { desc = 'then open previous buffer and keep current vertically split window' })
+vim.keymap.set('n', '<leader>bk', ':bd!<CR>', { desc = 'Force delete current buffer' })
+vim.keymap.set('n', '<leader>bkh', ':bp<bar>sp<bar>bn<bar>bd!<CR>', { desc = 'then open previous buffer and keep current horizontally split window' })
+vim.keymap.set('n', '<leader>bkv', ':bp<bar>vsp<bar>bn<bar>bd!<CR>', { desc = 'then open previous buffer and keep current vertically split window' })
 vim.keymap.set('n', '<leader>bn', ':bn<CR>', { desc = 'Go to next buffer' })
 vim.keymap.set('n', '<leader>bp', ':bp<CR>', { desc = 'Go to previous buffer' })
-vim.keymap.set('n', '<leader>bv', ':vnew<CR>', { desc = 'Create new vertically split window' })
+vim.keymap.set('n', '<leader>e', ':e ', { desc = 'Edit in current window' })
+vim.keymap.set('n', '<leader>en', ':ene<CR>', { desc = 'a new, unnamed buffer' })
+vim.keymap.set(
+  'n',
+  '<leader>map',
+  ':redir @a<bar>silent map<bar>redir END<bar>new<bar>put a<CR>',
+  { desc = "Edit output of ':map' in new horizontally split window" }
+)
 vim.keymap.set('n', '<leader>n', ':set number relativenumber! relativenumber?<CR>', { desc = 'Toggle hybrid line numbers' })
+vim.keymap.set('n', '<leader>qq', ':q<CR>', { desc = 'Quit current window' })
+vim.keymap.set('n', '<leader>rs', ':set scroll=0<CR>', { desc = "Reset 'scroll' to half the window height" })
+vim.keymap.set('n', '<leader>tb', 'g<Tab>', { desc = 'Switch between current and last tab' })
+vim.keymap.set('n', '<leader>tc', ':tabc<CR>', { desc = 'Close current tab' })
+vim.keymap.set('n', '<leader>te', ':tabe<CR>', { desc = 'Edit in new tab' })
+vim.keymap.set('n', '<leader>tn', ':tabn<CR>', { desc = 'Go to next tab' })
+vim.keymap.set('n', '<leader>tp', ':tabp<CR>', { desc = 'Go to previous tab' })
 vim.keymap.set('n', '<leader>w', ':set wrap! wrap?<CR>', { desc = 'Toggle line wrap' })
+vim.keymap.set('n', '<leader>wb', '<C-w><C-p>', { desc = 'Switch between current and last window' })
+vim.keymap.set('n', '<leader>wc', ':clo<CR>', { desc = 'Close current window' })
+vim.keymap.set('n', '<leader>wh', ':new<CR>', { desc = 'Edit in new horizontally split window' })
+vim.keymap.set('n', '<leader>wn', '<C-w>w', { desc = 'Go to next window' })
+vim.keymap.set('n', '<leader>wp', '<C-w>W', { desc = 'Go to previous window' })
+vim.keymap.set('n', '<leader>wv', ':vne<CR>', { desc = 'Edit in new vertically split window' })
+vim.keymap.set('n', 'vv', '<C-v>', { desc = 'Enter visual mode blockwise' })
+-- Terminal mode
 vim.keymap.set('t', 'kj', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+vim.keymap.set('t', '˙', '<Left>', { desc = 'Move leftward in terminal mode (macOS: Option-h)' })
+vim.keymap.set('t', '∆', '<C-n>', { desc = 'Recall more recent command-line from history in terminal mode (macOS: Option-j)' })
+vim.keymap.set('t', '˚', '<C-p>', { desc = 'Recall older command-line from history in terminal mode (macOS: Option-k)' })
+vim.keymap.set('t', '¬', '<Right>', { desc = 'Move rightward in terminal mode (macOS: Option-l)' })
+-- Visual mode
 vim.keymap.set('v', 'kj', '<Esc>', { desc = 'Exit visual mode' })
 
 -- [[ Indentation ]]
-vim.opt.expandtab = false
-vim.opt.shiftwidth = 4
-vim.opt.softtabstop = 4
-vim.opt.tabstop = 4
+vim.o.expandtab = false
+vim.o.shiftwidth = 4
+vim.o.softtabstop = 4
+vim.o.tabstop = 4
 
 -- [[ Neovide configurations which are not already configured in ~/.config/neovide/config.toml ]]
 if vim.g.neovide then
