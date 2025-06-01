@@ -1095,6 +1095,7 @@ vim.keymap.set('n', '<leader>bn', ':bn<CR>', { desc = 'Go to next buffer' })
 vim.keymap.set('n', '<leader>bp', ':bp<CR>', { desc = 'Go to previous buffer' })
 vim.keymap.set('n', '<leader>e', ':e ', { desc = 'Edit in current window' })
 vim.keymap.set('n', '<leader>en', ':ene<CR>', { desc = 'a new, unnamed buffer' })
+vim.keymap.set('n', '<leader>il', ':e ~/.config/nvim/init.lua<CR>', { desc = 'Edit init.lua' })
 vim.keymap.set(
   'n',
   '<leader>map',
@@ -1109,6 +1110,7 @@ vim.keymap.set('n', '<leader>tc', ':tabc<CR>', { desc = 'Close current tab' })
 vim.keymap.set('n', '<leader>te', ':tabe<CR>', { desc = 'Edit in new tab' })
 vim.keymap.set('n', '<leader>tn', ':tabn<CR>', { desc = 'Go to next tab' })
 vim.keymap.set('n', '<leader>tp', ':tabp<CR>', { desc = 'Go to previous tab' })
+vim.keymap.set('n', '<leader>ul', '/\\v^(\\s*#)@!.+<CR>', { desc = 'Search for uncommented lines' })
 vim.keymap.set('n', '<leader>w', ':set wrap! wrap?<CR>', { desc = 'Toggle line wrap' })
 vim.keymap.set('n', '<leader>wb', '<C-w><C-p>', { desc = 'Switch between current and last window' })
 vim.keymap.set('n', '<leader>wc', ':clo<CR>', { desc = 'Close current window' })
