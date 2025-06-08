@@ -15,11 +15,45 @@ return {
   },
   opts = {
     filesystem = {
+      bind_to_cwd = true, -- true creates a 2-way binding between vim's cwd and neo-tree's root
+      cwd_target = {
+        sidebar = 'tab', -- sidebar is when position = left or right
+        current = 'window', -- current is when position = current
+      },
+      filtered_items = {
+        visible = true,
+        show_hidden_count = true,
+        hide_dotfiles = false,
+        hide_gitignored = true,
+        hide_by_name = {
+          '.DS_Store',
+          '.git',
+          -- 'thumbs.db',
+        },
+        never_show = {},
+      },
+      follow_current_file = {
+        enabled = true, -- This will find and focus the file in the active buffer every time
+        --               -- the current file is changed while the tree is open.
+        leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
+      },
       window = {
         mappings = {
           ['\\'] = 'close_window',
         },
       },
     },
+    buffers = {
+      bind_to_cwd = true,
+      follow_current_file = {
+        enabled = true, -- This will find and focus the file in the active buffer every time
+        --              -- the current file is changed while the tree is open.
+        leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
+      },
+    },
   },
+  config = function(_, opts)
+    require('neo-tree').setup(opts)
+    vim.o.autochdir = true
+  end,
 }

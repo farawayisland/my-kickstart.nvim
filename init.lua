@@ -1,4 +1,4 @@
---[[
+--[[ Kickstart.nvim
 ~/.config/nvim/init.lua
 =====================================================================
 ==================== READ THIS BEFORE CONTINUING ====================
@@ -110,6 +110,20 @@ vim.o.mouse = 'a'
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
 
+-- Set clipboard (pbcopy and pbpaste by default on macOS)
+-- vim.g.clipboard = {
+--   name = 'xsel',
+--   copy = {
+--     ['+'] = 'xsel --nodetach -ib',
+--     ['*'] = 'xsel --nodetach -ip',
+--   },
+--   paste = {
+--     ['+'] = 'xsel -ob',
+--     ['*'] = 'xsel -op',
+--   },
+--   cache_enabled = true,
+-- }
+
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
@@ -158,8 +172,15 @@ vim.o.inccommand = 'split'
 -- Show which line your cursor is on
 vim.o.cursorline = true
 
--- Minimal number of screen lines to keep above and below the cursor.
-vim.o.scrolloff = 10
+-- Number of lines to scroll with CTRL-U and CTRL-D commands
+vim.api.nvim_create_autocmd({ 'BufEnter' }, {
+  pattern = { '*.*' },
+  desc = "Set 'scroll' value to 5 instead of half the window height",
+  command = 'set scroll=5',
+})
+
+-- Minimal number of screen lines to keep above and below the cursor
+vim.o.scrolloff = 3
 
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
@@ -174,7 +195,7 @@ vim.o.confirm = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+vim.keymap.set('n', '<Leader>qf', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uick[f]ix list' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -182,13 +203,13 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 --
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+vim.keymap.set('t', '<Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
+vim.keymap.set('n', '<Left>', '<cmd>echo "Use h to move!!"<CR>')
+vim.keymap.set('n', '<Right>', '<cmd>echo "Use l to move!!"<CR>')
+vim.keymap.set('n', '<Up>', '<cmd>echo "Use k to move!!"<CR>')
+vim.keymap.set('n', '<Down>', '<cmd>echo "Use j to move!!"<CR>')
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -344,9 +365,9 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
-        { '<leader>s', group = '[S]earch' },
-        { '<leader>t', group = '[T]oggle' },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<Leader>s', group = '[S]earch' },
+        { '<Leader>t', group = '[T]oggle' },
+        { '<Leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
       },
     },
   },
@@ -426,19 +447,19 @@ require('lazy').setup({
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
-      vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
-      vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
-      vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
-      vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-      vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
-      vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
-      vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
-      vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<Leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
+      vim.keymap.set('n', '<Leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
+      vim.keymap.set('n', '<Leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+      vim.keymap.set('n', '<Leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
+      vim.keymap.set('n', '<Leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
+      vim.keymap.set('n', '<Leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
+      vim.keymap.set('n', '<Leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
+      vim.keymap.set('n', '<Leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
+      vim.keymap.set('n', '<Leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
+      vim.keymap.set('n', '<Leader><Leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
       -- Slightly advanced example of overriding default behavior and theme
-      vim.keymap.set('n', '<leader>/', function()
+      vim.keymap.set('n', '<Leader>/', function()
         -- You can pass additional configuration to Telescope to change the theme, layout, etc.
         builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
           winblend = 10,
@@ -448,7 +469,7 @@ require('lazy').setup({
 
       -- It's also possible to pass additional configuration options.
       --  See `:help telescope.builtin.live_grep()` for information about particular keys
-      vim.keymap.set('n', '<leader>s/', function()
+      vim.keymap.set('n', '<Leader>s/', function()
         builtin.live_grep {
           grep_open_files = true,
           prompt_title = 'Live Grep in Open Files',
@@ -456,7 +477,7 @@ require('lazy').setup({
       end, { desc = '[S]earch [/] in Open Files' })
 
       -- Shortcut for searching your Neovim configuration files
-      vim.keymap.set('n', '<leader>sn', function()
+      vim.keymap.set('n', '<Leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
     end,
@@ -619,7 +640,7 @@ require('lazy').setup({
           --
           -- This may be unwanted, since they displace some of your code
           if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
-            map('<leader>th', function()
+            map('<Leader>th', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
             end, '[T]oggle Inlay [H]ints')
           end
@@ -742,12 +763,12 @@ require('lazy').setup({
     cmd = { 'ConformInfo' },
     keys = {
       {
-        '<leader>f',
+        '<Leader>fb',
         function()
           require('conform').format { async = true, lsp_format = 'fallback' }
         end,
         mode = '',
-        desc = '[F]ormat buffer',
+        desc = '[F]ormat [b]uffer',
       },
     },
     opts = {
@@ -1013,18 +1034,18 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
@@ -1057,82 +1078,195 @@ require('lazy').setup({
 
 -- [[ Additional Keymaps ]]
 -- Sources:
+-- https://stackoverflow.com/a/77072373
+-- https://superuser.com/a/410851
+-- https://superuser.com/a/963068
+-- https://vi.stackexchange.com/a/6737
 -- https://vi.stackexchange.com/a/18081
+
 -- Command mode
 vim.keymap.set('c', 'kj', '<C-c>', { desc = 'Exit command mode' })
 vim.keymap.set('c', '˙', '<Left>', { desc = 'Move leftward in command mode (macOS: Option-h)' })
 vim.keymap.set('c', '∆', '<C-n>', { desc = 'Recall more recent command-line from history in command mode (macOS: Option-j)' })
 vim.keymap.set('c', '˚', '<C-p>', { desc = 'Recall older command-line from history in command mode (macOS: Option-k)' })
 vim.keymap.set('c', '¬', '<Right>', { desc = 'Move rightward in command mode (macOS: Option-l)' })
-vim.keymap.set('c', 'Ó', '<S-Left>', { desc = 'Move one word backward in command mode (macOS: Shift-Option-h)' })
-vim.keymap.set('c', 'Ò', '<S-Right>', { desc = 'Move one word forward in insert mode (macOS: Shift-Option-l)' })
+vim.keymap.set('c', 'Ó', '<S-Left>', { desc = 'Move one word backward in command mode (macOS: Option-Shift-h)' })
+vim.keymap.set('c', 'Ò', '<S-Right>', { desc = 'Move one word forward in command mode (macOS: Option-Shift-l)' })
+vim.keymap.set('c', '<Leader>P', '<C-r>0', { desc = 'Paste last yanked text in command mode' })
+
 -- Insert mode
 vim.keymap.set('i', 'kj', '<Esc>', { desc = 'Exit insert mode' })
 vim.keymap.set('i', '˙', '<Left>', { desc = 'Move leftward in insert mode (macOS: Option-h)' })
 vim.keymap.set('i', '∆', '<Down>', { desc = 'Move downward in insert mode (macOS: Option-j)' })
 vim.keymap.set('i', '˚', '<Up>', { desc = 'Move upward in insert mode (macOS: Option-k)' })
 vim.keymap.set('i', '¬', '<Right>', { desc = 'Move rightward in insert mode (macOS: Option-l)' })
-vim.keymap.set('i', 'Ó', '<S-Left>', { desc = 'Move one word backward in insert mode (macOS: Shift-Option-h)' })
-vim.keymap.set('i', 'Ò', '<S-Right>', { desc = 'Move one word forward in insert mode (macOS: Shift-Option-l)' })
+vim.keymap.set('i', 'Ó', '<S-Left>', { desc = 'Move one word backward in insert mode (macOS: Option-Shift-h)' })
+vim.keymap.set('i', 'Ò', '<S-Right>', { desc = 'Move one word forward in insert mode (macOS: Option-Shift-l)' })
+vim.keymap.set('i', '<M-Left>', '<S-Left>', { desc = 'Move one word backward in insert mode (macOS: Option-Shift-h)' })
+vim.keymap.set('i', '<M-Right>', '<S-Right>', { desc = 'Move one word forward in insert mode (macOS: Option-Shift-l)' })
+
 -- Normal mode
-vim.keymap.set('n', '<leader>1', '1gt', { desc = 'Go to 1st tab' })
-vim.keymap.set('n', '<leader>2', '2gt', { desc = 'Go to 2nd tab' })
-vim.keymap.set('n', '<leader>3', '3gt', { desc = 'Go to 3rd tab' })
-vim.keymap.set('n', '<leader>4', '4gt', { desc = 'Go to 4th tab' })
-vim.keymap.set('n', '<leader>5', '5gt', { desc = 'Go to 5th tab' })
-vim.keymap.set('n', '<leader>6', '6gt', { desc = 'Go to 6th tab' })
-vim.keymap.set('n', '<leader>7', '7gt', { desc = 'Go to 7th tab' })
-vim.keymap.set('n', '<leader>8', '8gt', { desc = 'Go to 8th tab' })
-vim.keymap.set('n', '<leader>9', '9gt', { desc = 'Go to 9th tab' })
-vim.keymap.set('n', '<leader>bb', '<C-^>', { desc = 'Switch between current and last buffer' })
-vim.keymap.set('n', '<leader>bd', ':bd<CR>', { desc = 'Delete current buffer' })
-vim.keymap.set('n', '<leader>bdh', ':bp<bar>sp<bar>bn<bar>bd<CR>', { desc = 'then open previous buffer and keep current horizontally split window' })
-vim.keymap.set('n', '<leader>bdv', ':bp<bar>vsp<bar>bn<bar>bd<CR>', { desc = 'then open previous buffer and keep current vertically split window' })
-vim.keymap.set('n', '<leader>bk', ':bd!<CR>', { desc = 'Force delete current buffer' })
-vim.keymap.set('n', '<leader>bkh', ':bp<bar>sp<bar>bn<bar>bd!<CR>', { desc = 'then open previous buffer and keep current horizontally split window' })
-vim.keymap.set('n', '<leader>bkv', ':bp<bar>vsp<bar>bn<bar>bd!<CR>', { desc = 'then open previous buffer and keep current vertically split window' })
-vim.keymap.set('n', '<leader>bn', ':bn<CR>', { desc = 'Go to next buffer' })
-vim.keymap.set('n', '<leader>bp', ':bp<CR>', { desc = 'Go to previous buffer' })
-vim.keymap.set('n', '<leader>e', ':e ', { desc = 'Edit in current window' })
-vim.keymap.set('n', '<leader>en', ':ene<CR>', { desc = 'a new, unnamed buffer' })
-vim.keymap.set('n', '<leader>il', ':e ~/.config/nvim/init.lua<CR>', { desc = 'Edit init.lua' })
+vim.keymap.set('n', '``', '``zz', { desc = 'Go to previous jump/mark and redraw line at center of window' })
+vim.keymap.set('n', '<C-d>', function()
+  vim.o.scroll = vim.v.count1 == 1 and vim.o.scroll or vim.v.count1
+  return ':<C-u>exe "norm!' .. vim.o.scroll .. 'j"<CR>zz'
+end, { desc = "Scroll window 'scroll' amount downward (ignoring wrapped lines) and redraw line at center of window", expr = true, silent = true })
+vim.keymap.set('n', '<C-n>', '<C-n>zz', { desc = 'Go to [count] lines downward and redraw line at center of window' })
+vim.keymap.set('n', '<C-p>', '<C-p>zz', { desc = 'Go to [count] lines upward and redraw line at center of window' })
+vim.keymap.set('n', '<C-S-Enter>', 'r<CR>', { desc = 'Replace the character under the cursor with <CR>' })
+vim.keymap.set('n', '<C-u>', function()
+  vim.o.scroll = vim.v.count1 == 1 and vim.o.scroll or vim.v.count1
+  return ':<C-u>exe "norm!' .. vim.o.scroll .. 'k"<CR>zz'
+end, { desc = "Scroll window 'scroll' amount upward (ignoring wrapped lines) and redraw line at center of window", expr = true, silent = true })
+vim.keymap.set('n', 'N', 'Nzz', { desc = 'Repeat the latest "/" or "?" [count] times in opposite direction and redraw line at center of window' })
+vim.keymap.set('n', 'n', 'nzz', { desc = 'Repeat the latest "/" or "?" [count] times and redraw line at center of window' })
+vim.keymap.set('n', '<Leader>1', '1gt', { desc = 'Go to 1st tab' })
+vim.keymap.set('n', '<Leader>2', '2gt', { desc = 'Go to 2nd tab' })
+vim.keymap.set('n', '<Leader>3', '3gt', { desc = 'Go to 3rd tab' })
+vim.keymap.set('n', '<Leader>4', '4gt', { desc = 'Go to 4th tab' })
+vim.keymap.set('n', '<Leader>5', '5gt', { desc = 'Go to 5th tab' })
+vim.keymap.set('n', '<Leader>6', '6gt', { desc = 'Go to 6th tab' })
+vim.keymap.set('n', '<Leader>7', '7gt', { desc = 'Go to 7th tab' })
+vim.keymap.set('n', '<Leader>8', '8gt', { desc = 'Go to 8th tab' })
+vim.keymap.set('n', '<Leader>9', '9gt', { desc = 'Go to 9th tab' })
+vim.keymap.set('n', '<Leader>;', 'q:', { desc = 'Open command mode history window' })
+vim.keymap.set('n', '<Leader>[', '<', { desc = "Shift {motion} lines one 'shiftwidth' leftward" })
+vim.keymap.set('n', '<Leader>]', '>', { desc = "Shift {motion} lines one 'shiftwidth' rightward" })
+vim.keymap.set('n', '<Leader>bd', ':bd<CR>', { desc = 'Delete current buffer' })
+vim.keymap.set('n', '<Leader>bdh', ':bp<Bar>sp<Bar>bn<Bar>bd<CR>', { desc = 'then open previous buffer and keep current horizontally split window' })
+vim.keymap.set('n', '<Leader>bdv', ':bp<Bar>vsp<Bar>bn<Bar>bd<CR>', { desc = 'then open previous buffer and keep current vertically split window' })
+vim.keymap.set('n', '<Leader>bk', ':bd!<CR>', { desc = 'Force delete current buffer' })
+vim.keymap.set('n', '<Leader>bkh', ':bp<Bar>sp<Bar>bn<Bar>bd!<CR>', { desc = 'then open previous buffer and keep current horizontally split window' })
+vim.keymap.set('n', '<Leader>bkv', ':bp<Bar>vsp<Bar>bn<Bar>bd!<CR>', { desc = 'then open previous buffer and keep current vertically split window' })
+vim.keymap.set('n', '<Leader>ch', ':che<CR>', { desc = 'Run all healthchecks' })
+vim.keymap.set('n', '<Leader>e', ':e ', { desc = 'Edit in current window' })
 vim.keymap.set(
   'n',
-  '<leader>map',
-  ':redir @a<bar>silent map<bar>redir END<bar>new<bar>put a<CR>',
+  '<Leader>eftp',
+  ":ene <Bar> %!echo \"-- ~/.config/nvim/lua/custom/plugins/.lua\\n-- \\n-- https://github.com/username/repository\\nreturn {\\n  'username/repository',\\n  opts = {},\\n  config = function(_, opts)\\n    require('plugin').setup(opts)\\n  end,\\n}\"<CR>",
+  { desc = 'a Neovim plugin file template' }
+)
+vim.keymap.set('n', '<Leader>en', ':ene<CR>', { desc = 'a new, unnamed buffer' })
+vim.keymap.set('n', '<Leader>fc', 'zc', { desc = 'Close one fold under the cursor' })
+vim.keymap.set('n', '<Leader>fca', 'zM', { desc = 'Close all folds' })
+vim.keymap.set('n', '<Leader>fcr', 'zC', { desc = 'Close all folds under the cursor recursively' })
+vim.keymap.set('n', '<Leader>fo', 'zo', { desc = 'Open one fold under the cursor' })
+vim.keymap.set('n', '<Leader>foa', 'zR', { desc = 'Open all folds' })
+vim.keymap.set('n', '<Leader>for', 'zO', { desc = 'Open all folds under the cursor recursively' })
+vim.keymap.set('n', '<Leader>ft', 'za', { desc = 'Toggle one fold under the cursor' })
+vim.keymap.set('n', '<Leader>ftr', 'zA', { desc = 'Toggle all folds under the cursor recursively' })
+vim.keymap.set('n', '<Leader>il', ':e ~/.config/nvim/init.lua<CR>', { desc = 'Edit init.lua' })
+vim.keymap.set(
+  'n',
+  '<Leader>map',
+  ':redir @a<Bar>silent map<Bar>redir END<Bar>new<Bar>put a<CR>',
   { desc = "Edit output of ':map' in new horizontally split window" }
 )
-vim.keymap.set('n', '<leader>n', ':set number relativenumber! relativenumber?<CR>', { desc = 'Toggle hybrid line numbers' })
-vim.keymap.set('n', '<leader>qq', ':q<CR>', { desc = 'Quit current window' })
-vim.keymap.set('n', '<leader>rs', ':set scroll=0<CR>', { desc = "Reset 'scroll' to half the window height" })
-vim.keymap.set('n', '<leader>tb', 'g<Tab>', { desc = 'Switch between current and last tab' })
-vim.keymap.set('n', '<leader>tc', ':tabc<CR>', { desc = 'Close current tab' })
-vim.keymap.set('n', '<leader>te', ':tabe<CR>', { desc = 'Edit in new tab' })
-vim.keymap.set('n', '<leader>tn', ':tabn<CR>', { desc = 'Go to next tab' })
-vim.keymap.set('n', '<leader>tp', ':tabp<CR>', { desc = 'Go to previous tab' })
-vim.keymap.set('n', '<leader>ul', '/\\v^(\\s*#)@!.+<CR>', { desc = 'Search for uncommented lines' })
-vim.keymap.set('n', '<leader>w', ':set wrap! wrap?<CR>', { desc = 'Toggle line wrap' })
-vim.keymap.set('n', '<leader>wb', '<C-w><C-p>', { desc = 'Switch between current and last window' })
-vim.keymap.set('n', '<leader>wc', ':clo<CR>', { desc = 'Close current window' })
-vim.keymap.set('n', '<leader>wh', ':new<CR>', { desc = 'Edit in new horizontally split window' })
-vim.keymap.set('n', '<leader>wn', '<C-w>w', { desc = 'Go to next window' })
-vim.keymap.set('n', '<leader>wp', '<C-w>W', { desc = 'Go to previous window' })
-vim.keymap.set('n', '<leader>wv', ':vne<CR>', { desc = 'Edit in new vertically split window' })
+vim.keymap.set('n', '<Leader>l', function()
+  local default_value = true
+  vim.o.relativenumber = vim.o.relativenumber == false and default_value or false
+  print('relativenumber = ' .. tostring(vim.o.relativenumber) .. ', number = ' .. tostring(vim.o.number))
+end, { desc = 'Toggle hybrid line numbers' })
+vim.keymap.set('n', '<Leader>lz', ':Lazy<CR>', { desc = 'Open lazy.nvim plugin list' })
+vim.keymap.set('n', '<Leader>n', ':bn<CR>', { desc = 'Go to next buffer' })
+vim.keymap.set('n', '<Leader>p', ':bp<CR>', { desc = 'Go to previous buffer' })
+vim.keymap.set('n', '<Leader>ph', ':Hardtime toggle<CR>', { desc = 'Toggle hardtime.nvim plugin' })
+vim.keymap.set('n', '<Leader>pp', ':Precognition toggle<CR>', { desc = 'Toggle precognition.nvim plugin' })
+vim.keymap.set(
+  'n',
+  '<Leader>prcwo',
+  ':%s;\\v(config \\= function\\(\\)\\_.{-}require\\(.{-}\\).setup\\(\\)\\_.*end)(,{-});opts = {}\\2',
+  { desc = "Replace 'config = function() require(<plugin>).setup()' with opts = {}" }
+)
+vim.keymap.set('n', '<Leader>prfn', ':1s;\\v(/plugins/)@<=.{-}(\\.lua)@=;', { desc = 'Replace filename in plugin directory comment template' })
+vim.keymap.set(
+  'n',
+  '<Leader>prrl',
+  ":3,4s;\\v(github\\.com/)@<=.{-}($\\_.{-}'(.{-})')@=;\\3",
+  { desc = 'Replace repository link in plugin directory comment template' }
+)
+vim.keymap.set('n', '<Leader>ps', ':Screenkey toggle<CR>', { desc = 'Toggle screenkey.nvim plugin' })
+vim.keymap.set('n', '<Leader>qs', function()
+  require('persistence').load()
+end, { desc = 'Load the session for the current directory' })
+vim.keymap.set('n', '<Leader>qS', function()
+  require('persistence').select()
+end, { desc = 'Select a session to load' })
+vim.keymap.set('n', '<Leader>ql', function()
+  require('persistence').load { last = true }
+end, { desc = 'Load the last session' })
+vim.keymap.set('n', '<Leader>qd', function()
+  require('persistence').stop()
+end, { desc = "Stop Persistence => session won't be saved on exit" })
+vim.keymap.set('n', '<Leader>qw', ':q<CR>', { desc = 'Quit current window' })
+vim.keymap.set('n', '<Leader>r\\', ':s;\\;\\\\;g', { desc = 'Replace backslashes with escaped ones' })
+vim.keymap.set('n', '<Leader>sc', function()
+  local default_value = 5
+  vim.o.scroll = vim.o.scroll == math.floor(vim.api.nvim_win_get_height(0) / 2) and default_value or 0
+  print('scroll = ' .. vim.o.scroll .. ', height = ' .. vim.api.nvim_win_get_height(0))
+end, { desc = "Cycle 'scroll' between 0 (half the window height) and 5 (my default)" })
+vim.keymap.set('n', '<Leader>so', function()
+  local default_value = 3
+  vim.o.scrolloff = vim.o.scrolloff == 0 and default_value or 0
+  print('scrolloff = ' .. vim.o.scrolloff .. ', height = ' .. vim.api.nvim_win_get_height(0))
+end, { desc = "Cycle 'scrolloff' between 0 and 3 (my default)" })
+vim.keymap.set('n', '<Leader><Tab>', '<C-^>', { desc = 'Switch between current and last buffer' })
+vim.keymap.set('n', '<Leader>tb', 'g<Tab>', { desc = 'Switch between current and last tab' })
+vim.keymap.set('n', '<Leader>tc', ':tabc<CR>', { desc = 'Close current tab' })
+vim.keymap.set('n', '<Leader>te', ':tabe<CR>', { desc = 'Edit in new tab' })
+vim.keymap.set('n', '<Leader>tn', ':tabn<CR>', { desc = 'Go to next tab' })
+vim.keymap.set('n', '<Leader>tp', ':tabp<CR>', { desc = 'Go to previous tab' })
+vim.keymap.set('n', '<Leader>ul', '/\\v^(\\s*#)@!.+<CR>', { desc = 'Search for uncommented lines' })
+vim.keymap.set('n', '<Leader>w', function()
+  local default_value = true
+  vim.o.wrap = vim.o.wrap == false and default_value or false
+  print('wrap = ' .. tostring(vim.o.wrap))
+end, { desc = 'Toggle line wrap' })
+vim.keymap.set('n', '<Leader>wb', '<C-w><C-p>', { desc = 'Switch between current and last window' })
+vim.keymap.set('n', '<Leader>wc', ':clo<CR>', { desc = 'Close current window' })
+vim.keymap.set('n', '<Leader>wh', ':new<CR>', { desc = 'Edit in new horizontally split window' })
+vim.keymap.set('n', '<Leader>wn', '<C-w>w', { desc = 'Go to next window' })
+vim.keymap.set('n', '<Leader>wp', '<C-w>W', { desc = 'Go to previous window' })
+vim.keymap.set('n', '<Leader>wv', ':vne<CR>', { desc = 'Edit in new vertically split window' })
+vim.keymap.set('n', '<Leader>zsh', ':!', { desc = "Execute command with 'shell'" })
 vim.keymap.set('n', 'vv', '<C-v>', { desc = 'Enter visual mode blockwise' })
+
 -- Terminal mode
 vim.keymap.set('t', 'kj', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 vim.keymap.set('t', '˙', '<Left>', { desc = 'Move leftward in terminal mode (macOS: Option-h)' })
 vim.keymap.set('t', '∆', '<C-n>', { desc = 'Recall more recent command-line from history in terminal mode (macOS: Option-j)' })
 vim.keymap.set('t', '˚', '<C-p>', { desc = 'Recall older command-line from history in terminal mode (macOS: Option-k)' })
 vim.keymap.set('t', '¬', '<Right>', { desc = 'Move rightward in terminal mode (macOS: Option-l)' })
+
 -- Visual mode
-vim.keymap.set('v', 'kj', '<Esc>', { desc = 'Exit visual mode' })
+vim.keymap.set('x', 'kj', '<Esc>', { desc = 'Exit visual mode' })
+vim.keymap.set('x', 'P', 'p', { desc = 'Put without changing unnamed register in visual mode' })
+vim.keymap.set('x', 'p', 'P', { desc = 'Put and change unnamed register with selection in visual mode' })
 
 -- [[ Indentation ]]
 vim.o.expandtab = false
 vim.o.shiftwidth = 4
 vim.o.softtabstop = 4
 vim.o.tabstop = 4
+
+-- [[ Folds ]]
+-- Sources:
+-- https://stackoverflow.com/a/77180744/19821277
+
+-- Autosave folds
+vim.api.nvim_create_autocmd({ 'BufWinLeave' }, {
+  pattern = { '*.*' },
+  desc = 'Save view (folds), when closing file',
+  command = 'mkview',
+})
+vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
+  pattern = { '*.*' },
+  desc = 'Load view (folds), when opening file',
+  command = 'silent! loadview',
+})
+
+-- Remove fillchars
+vim.o.fillchars = 'fold: '
 
 -- [[ Neovide configurations which are not already configured in ~/.config/neovide/config.toml ]]
 if vim.g.neovide then
