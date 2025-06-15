@@ -1,12 +1,26 @@
 -- ~/.config/nvim/lua/custom/plugins/vimtex.lua
--- A modern Vim and neovim filetype plugin for LaTeX files
+-- A modern Vim and Neovim filetype plugin for LaTeX files
 -- https://github.com/lervag/vimtex
 return {
   'lervag/vimtex',
-  lazy = false, -- we don't want to lazy load VimTeX
-  -- tag = "v2.15", -- uncomment to pin to a specific release
+  lazy = false,
   init = function()
-    -- VimTeX configuration goes here, e.g.
+    vim.cmd 'filetype plugin indent on'
+    vim.cmd 'syntax enable'
+    vim.g.tex_flavor = 'latex'
+    vim.g.vimtex_compile_latexmk = {
+      continuous = { 0 },
+      executable = 'latexmk',
+      options = {
+        '-file-line-error',
+        '-interactions=nonstopmode',
+        '-synctex=1',
+      },
+    }
+    vim.g.vimtex_compiler_latexmk_engines = {
+      _ = '-lualatex',
+    }
+    vim.g.vimtex_compiler_method = 'latexmk'
     vim.g.vimtex_view_method = 'sioyek'
   end,
 }

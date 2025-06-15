@@ -11,7 +11,8 @@ return {
   },
   lazy = false,
   keys = {
-    { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+    { '\\', ':Neotree reveal_force_cwd<CR>', desc = 'Display Neo-tree sidebar and reveal current file without prompting', silent = true },
+    { '<Leader>\\', ':Neotree<CR>', desc = 'Display Neo-tree sidebar of the last directory set as root', silent = true },
   },
   opts = {
     filesystem = {
@@ -40,6 +41,7 @@ return {
       window = {
         mappings = {
           ['\\'] = 'close_window',
+          ['<Leader><Tab>'] = 'close_window',
         },
       },
     },

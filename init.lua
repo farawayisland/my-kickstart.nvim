@@ -428,11 +428,19 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          mappings = {
+            i = {
+              -- ['<C-Enter>'] = 'to_fuzzy_refine',
+              ['<Leader>P'] = function()
+                vim.cmd 'exe "norm! i\\<C-r>0"'
+              end,
+              ['<Leader>PP'] = function()
+                vim.cmd 'exe "norm! i\\<C-r>+"'
+              end,
+            },
+          },
+        },
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
@@ -788,7 +796,8 @@ require('lazy').setup({
         end
       end,
       formatters_by_ft = {
-        lua = { 'stylua' },
+        lua = { 'stylua' }, -- https://github.com/JohnnyMorganz/StyLua
+        tex = { 'tex-fmt' }, -- https://github.com/WGUNDERWOOD/tex-fmt
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -820,12 +829,12 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+            end,
+          },
         },
         opts = {},
       },
@@ -857,6 +866,25 @@ require('lazy').setup({
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
         preset = 'default',
+
+        ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
+        ['<C-e>'] = { 'hide' },
+        ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
+        ['<C-k>'] = { 'show_signature', 'hide_signature', 'fallback' },
+        ['<C-n>'] = { 'select_next', 'fallback_to_mappings' },
+        ['<C-p>'] = { 'select_prev', 'fallback_to_mappings' },
+        -- show with a list of providers
+        ['<C-Space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+        -- ['<C-Space>'] = {
+        --   function(cmp)
+        --     cmp.show { providers = { 'snippets' } }
+        --   end,
+        -- },
+        ['<C-y>'] = { 'select_and_accept' },
+        ['<Down>'] = { 'select_next', 'fallback' },
+        ['<Tab>'] = { 'snippet_forward', 'fallback' },
+        ['<S-Tab>'] = { 'snippet_backward', 'fallback' },
+        ['<Up>'] = { 'select_prev', 'fallback' },
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -1010,6 +1038,7 @@ require('lazy').setup({
       auto_install = true,
       highlight = {
         enable = true,
+        disable = { 'latex' },
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
         --  If you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
@@ -1078,6 +1107,7 @@ require('lazy').setup({
 
 -- [[ Additional Keymaps ]]
 -- Sources:
+-- https://stackoverflow.com/a/6228454
 -- https://stackoverflow.com/a/77072373
 -- https://superuser.com/a/410851
 -- https://superuser.com/a/963068
@@ -1093,6 +1123,7 @@ vim.keymap.set('c', '¬', '<Right>', { desc = 'Move rightward in command mode (m
 vim.keymap.set('c', 'Ó', '<S-Left>', { desc = 'Move one word backward in command mode (macOS: Option-Shift-h)' })
 vim.keymap.set('c', 'Ò', '<S-Right>', { desc = 'Move one word forward in command mode (macOS: Option-Shift-l)' })
 vim.keymap.set('c', '<Leader>P', '<C-r>0', { desc = 'Paste last yanked text in command mode' })
+vim.keymap.set('c', '<Leader>PP', '<C-r>+', { desc = 'Paste system clipboard content in command mode' })
 
 -- Insert mode
 vim.keymap.set('i', 'kj', '<Esc>', { desc = 'Exit insert mode' })
@@ -1200,7 +1231,13 @@ vim.keymap.set('n', '<Leader>qd', function()
 end, { desc = "Stop Persistence => session won't be saved on exit" })
 vim.keymap.set('n', '<Leader>qw', ':q<CR>', { desc = 'Quit current window' })
 vim.keymap.set('n', '<Leader>r\\', ':s;\\;\\\\;g', { desc = 'Replace backslashes with escaped ones' })
-vim.keymap.set('n', '<Leader>sc', function()
+vim.keymap.set('n', '<Leader>rf+0', ':let @+=@0<CR>', { desc = "Fill register '+' with contents of register '0'" })
+vim.keymap.set('n', '<Leader>rf0+', ':let @0=@+<CR>', { desc = "Fill register '0' with contents of register '+'" })
+vim.keymap.set('n', '<Leader>rfab', ':ilet @a=@bFa', { desc = "Fill register 'a' with contents of register 'b'" })
+vim.keymap.set('n', '<Leader>rr+n', ':let @+=substitute(strtrans(@+),"\\^@"," ","g")<CR>', { desc = "Replace newlines in register '+' with spaces" })
+vim.keymap.set('n', '<Leader>rr0n', ':let @0=substitute(strtrans(@0),"\\^@"," ","g")<CR>', { desc = "Replace newlines in register '0' with spaces" })
+vim.keymap.set('n', '<Leader>rran', ':ilet @a=substitute(strtrans(@a),"\\^@"," ","g")3Fa', { desc = "Replace newlines in register 'a' with spaces" })
+vim.keymap.set('n', '<Leader>s', function()
   local default_value = 5
   vim.o.scroll = vim.o.scroll == math.floor(vim.api.nvim_win_get_height(0) / 2) and default_value or 0
   print('scroll = ' .. vim.o.scroll .. ', height = ' .. vim.api.nvim_win_get_height(0))
