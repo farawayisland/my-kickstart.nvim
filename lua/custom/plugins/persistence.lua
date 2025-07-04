@@ -11,4 +11,13 @@ return {
     need = 1,
     branch = true, -- use git branch to save session
   },
+  config = function(_, opts)
+    require('persistence').setup(opts)
+    vim.api.nvim_create_autocmd('User', {
+      group = vim.api.nvim_create_augroup('close-terminal-buffers', { clear = true }),
+      pattern = 'PersistenceSavePre',
+      desc = 'Close all terminal buffers, if any exists, before saving session',
+      command = "bufdo if (bufname() =~ '^term://*') | bd! | endif",
+    })
+  end,
 }

@@ -173,7 +173,8 @@ vim.o.inccommand = 'split'
 vim.o.cursorline = true
 
 -- Number of lines to scroll with CTRL-U and CTRL-D commands
-vim.api.nvim_create_autocmd({ 'BufEnter' }, {
+vim.api.nvim_create_autocmd('BufEnter', {
+  group = vim.api.nvim_create_augroup('set-scroll-value', { clear = true }),
   pattern = { '*.*' },
   desc = "Set 'scroll' value to 5 instead of half the window height",
   command = 'set scroll=5',
@@ -1037,7 +1038,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'commonlisp', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -1308,31 +1309,38 @@ vim.keymap.set('t', 'kj', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- Visual mode
 vim.keymap.set('x', 'kj', '<Esc>', { desc = 'Exit visual mode' })
-vim.keymap.set('n', '<Leader>[', '<', { desc = "Shift the highlighted lines [count] 'shiftwidth' leftward" })
-vim.keymap.set('n', '<Leader>]', '>', { desc = "Shift the highlighted lines [count] 'shiftwidth' rightward" })
-vim.keymap.set('x', '<Leader>j', 'magc`azz', { desc = 'Comment or uncomment the selected line(s) and redraw line at center of window' })
+vim.keymap.set('x', '<Leader>[', '<', { desc = "Shift the highlighted lines [count] 'shiftwidth' leftward" })
+vim.keymap.set('x', '<Leader>]', '>', { desc = "Shift the highlighted lines [count] 'shiftwidth' rightward" })
+vim.keymap.set(
+  'x',
+  '<Leader>j',
+  'ml<Cmd>exe "norm gc"<CR>`lzz',
+  { desc = 'Comment or uncomment the selected line(s), return to last cursor position, and redraw line at center of window' }
+)
 vim.keymap.set('x', 'P', 'p', { desc = 'Put without changing unnamed register in visual mode' })
 vim.keymap.set('x', 'p', 'P', { desc = 'Put and change unnamed register with selection in visual mode' })
-vim.keymap.set('x', 'maY`azz', 'P', { desc = 'Yank the highlighted lines and redraw line at center of window' })
-vim.keymap.set('x', 'may`azz', 'P', { desc = 'Yank the highlighted text and redraw line at center of window' })
+vim.keymap.set('x', 'Y', 'mlY`lzz', { desc = 'Yank the highlighted lines, return to last cursor position, and redraw line at center of window' })
+vim.keymap.set('x', 'y', 'mly`lzz', { desc = 'Yank the highlighted text, return to last cursor position, and redraw line at center of window' })
 
 -- [[ Indentation ]]
-vim.o.expandtab = false
-vim.o.shiftwidth = 4
-vim.o.softtabstop = 4
-vim.o.tabstop = 4
+vim.o.expandtab = true
+vim.o.shiftwidth = 2
+vim.o.softtabstop = 2
+vim.o.tabstop = 2
 
 -- [[ Folds ]]
 -- Sources:
--- https://stackoverflow.com/a/77180744/19821277
+-- https://stackoverflow.com/a/77180744
 
 -- Autosave folds
-vim.api.nvim_create_autocmd({ 'BufWinLeave' }, {
+vim.api.nvim_create_autocmd('BufWinLeave', {
+  group = vim.api.nvim_create_augroup('save-folds', { clear = true }),
   pattern = { '*.*' },
   desc = 'Save view (folds), when closing file',
   command = 'mkview',
 })
-vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
+vim.api.nvim_create_autocmd('BufWinEnter', {
+  group = vim.api.nvim_create_augroup('load-folds', { clear = true }),
   pattern = { '*.*' },
   desc = 'Load view (folds), when opening file',
   command = 'silent! loadview',
