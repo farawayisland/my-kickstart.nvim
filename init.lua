@@ -704,18 +704,21 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
+        basedpyright = {},
+        clangd = {},
+        --
         -- gopls = {},
-        -- pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
+        texlab = {},
+        --
+        -- Some languages (like TypeScript) have entire language plugins that can be useful:
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {},
         --
+        ts_ls = {},
 
         lua_ls = {
           -- cmd = { ... },
@@ -748,7 +751,13 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'stylua', -- Used to format Lua code
+        'black', -- Python code formatter | https://github.com/psf/black
+        'clang-format', -- C code formatter | https://clang.llvm.org/docs/ClangFormat.html
+        'isort', -- Python imports sorter | https://github.com/PyCQA/isort
+        'prettier', -- Multilingual code formatter | https://github.com/prettier/prettier
+        'prettierd', -- Multilingual code formatter | https://github.com/fsouza/prettierd
+        'stylua', -- Lua code formatter | https://github.com/JohnnyMorganz/StyLua
+        'tex-fmt', -- LaTeX code formatter | https://github.com/WGUNDERWOOD/tex-fmt
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -803,10 +812,10 @@ require('lazy').setup({
         lua = { 'stylua' }, -- https://github.com/JohnnyMorganz/StyLua
         tex = { 'tex-fmt' }, -- https://github.com/WGUNDERWOOD/tex-fmt
         -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
+        python = { 'isort', 'black' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
       },
     },
   },
@@ -1038,7 +1047,22 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'commonlisp', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = {
+        'bash',
+        'c',
+        'commonlisp',
+        'diff',
+        'html',
+        'javascript',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'typescript',
+        'vim',
+        'vimdoc',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -1238,6 +1262,7 @@ vim.keymap.set('n', '<Leader>bk', '<Cmd>bd!<CR>', { desc = 'Force delete current
 vim.keymap.set('n', '<Leader>bkh', '<Cmd>bp<Bar>sp<Bar>bn<Bar>bd!<CR>', { desc = 'then open previous buffer and keep current horizontally split window' })
 vim.keymap.set('n', '<Leader>bkv', '<Cmd>bp<Bar>vsp<Bar>bn<Bar>bd!<CR>', { desc = 'then open previous buffer and keep current vertically split window' })
 vim.keymap.set('n', '<Leader>ch', '<Cmd>che<CR>', { desc = 'Run all healthchecks' })
+vim.keymap.set('n', '<Leader>db', '<Cmd>Alpha<CR>', { desc = "Open alpha.nvim's dashboard buffer" })
 vim.keymap.set(
   'n',
   '<Leader>eftp',
@@ -1357,7 +1382,8 @@ if vim.g.neovide then
   vim.g.neovide_fullscreen = true
   -- GUI cursor options | https://neovim.io/doc/user/options.html#'guicursor'
   vim.opt.guicursor = {
-    'n-v-c:block',
-    'i:block-blinkwait100-blinkoff350-blinkon350',
+    'n-c-o-sm-v-ve:block',
+    'ci-i-t:ver25',
+    'r-cr:hor20',
   }
 end
