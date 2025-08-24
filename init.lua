@@ -176,8 +176,10 @@ vim.o.cursorline = true
 vim.api.nvim_create_autocmd('BufEnter', {
   group = vim.api.nvim_create_augroup('set-scroll-value', { clear = true }),
   pattern = { '*.*' },
-  desc = "Set 'scroll' value to 5 instead of half the window height",
-  command = 'set scroll=5',
+  desc = "Set 'scroll' value to 5 instead of half of window height",
+  callback = function()
+    vim.o.scroll = 5
+  end,
 })
 
 -- Minimal number of screen lines to keep above and below the cursor
@@ -1185,7 +1187,6 @@ vim.keymap.set({ 'n', 'x' }, '<C-d>', function()
 end, { desc = "Scroll window 'scroll' amount downward (ignoring wrapped lines) and redraw line at center of window", expr = true, silent = true })
 vim.keymap.set({ 'n', 'x' }, '<C-n>', '<C-n>zz', { desc = 'Go to [count] lines downward and redraw line at center of window' })
 vim.keymap.set({ 'n', 'x' }, '<C-p>', '<C-p>zz', { desc = 'Go to [count] lines upward and redraw line at center of window' })
-vim.keymap.set({ 'n', 'x' }, '<C-S-Enter>', 'r<CR>', { desc = 'Replace the character under the cursor with <CR>' })
 vim.keymap.set({ 'n', 'x' }, '<C-u>', function()
   vim.o.scroll = vim.v.count1 == 1 and vim.o.scroll or vim.v.count1
   return '<Cmd>exe "norm!' .. vim.o.scroll .. 'k"<CR>zz'
@@ -1211,7 +1212,7 @@ vim.keymap.set({ 'n', 'x' }, '<Leader>for', 'zO', { desc = 'Open all folds under
 vim.keymap.set({ 'n', 'x' }, '<Leader>ft', 'za', { desc = 'Toggle one fold under the cursor' })
 vim.keymap.set({ 'n', 'x' }, '<Leader>ftr', 'zA', { desc = 'Toggle all folds under the cursor recursively' })
 vim.keymap.set({ 'n', 'x' }, '<Leader>h', '^', { desc = 'Go to first non-blank character of current line' })
-vim.keymap.set({ 'n', 'x' }, '<Leader>il', '<Cmd>e ~/.config/nvim/init.lua<CR>', { desc = 'Edit init.lua' })
+vim.keymap.set({ 'n', 'x' }, '<Leader>il', '<Cmd>e $HOME/.config/nvim/init.lua<CR>', { desc = 'Edit init.lua' })
 vim.keymap.set({ 'n', 'x' }, '<Leader>l', 'g_', { desc = 'Go to last non-blank character of current line and [count - 1] lines downward' })
 vim.keymap.set({ 'n', 'x' }, '<Leader>ln', function()
   local default_value = true
@@ -1225,7 +1226,7 @@ vim.keymap.set({ 'n', 'x' }, '<Leader>s', function()
   local default_value = 5
   vim.o.scroll = vim.o.scroll == math.floor(vim.api.nvim_win_get_height(0) / 2) and default_value or 0
   print('scroll = ' .. vim.o.scroll .. ', height = ' .. vim.api.nvim_win_get_height(0))
-end, { desc = "Cycle 'scroll' between 0 (half the window height) and 5 (my default)" })
+end, { desc = "Cycle 'scroll' between 0 (half of window height) and 5 (my default)" })
 vim.keymap.set({ 'n', 'x' }, '<Leader>so', function()
   local default_value = 3
   vim.o.scrolloff = vim.o.scrolloff == 0 and default_value or 0
@@ -1250,24 +1251,49 @@ vim.keymap.set({ 'n', 'x' }, '<Leader>wv', '<Cmd>vne<CR>', { desc = 'Edit in new
 vim.keymap.set({ 'n', 'x' }, '<Leader>zsh', ':<C-u>!', { desc = "Execute command with 'shell'" })
 vim.keymap.set({ 'n', 'x' }, 'N', 'Nzz', { desc = 'Repeat the latest "/" or "?" [count] times in opposite direction and redraw line at center of window' })
 vim.keymap.set({ 'n', 'x' }, 'n', 'nzz', { desc = 'Repeat the latest "/" or "?" [count] times and redraw line at center of window' })
+vim.keymap.set({ 'n', 'x' }, '<S-Enter>', 'r<CR>', { desc = 'Replace the character under the cursor with <CR>' })
 vim.keymap.set({ 'n', 'x' }, 'vv', '<C-v>', { desc = 'Enter visual mode blockwise' })
 
 -- Normal mode
 vim.keymap.set('n', '<Leader>[', '<<', { desc = "Shift [count] lines one 'shiftwidth' leftward" })
 vim.keymap.set('n', '<Leader>]', '>>', { desc = "Shift [count] lines one 'shiftwidth' rightward" })
 vim.keymap.set('n', '<Leader>bd', '<Cmd>bd<CR>', { desc = 'Delete current buffer' })
+vim.keymap.set(
+  'n',
+  '<Leader>bd.',
+  ":<C-u>ibufdo if (bufname() =~ '\\.$') <Bar> bd <Bar> endifF.a",
+  { desc = 'Delete all buffers with a given filename extension' }
+)
 vim.keymap.set('n', '<Leader>bdh', '<Cmd>bp<Bar>sp<Bar>bn<Bar>bd<CR>', { desc = 'then open previous buffer and keep current horizontally split window' })
 vim.keymap.set('n', '<Leader>bdv', '<Cmd>bp<Bar>vsp<Bar>bn<Bar>bd<CR>', { desc = 'then open previous buffer and keep current vertically split window' })
 vim.keymap.set('n', '<Leader>bk', '<Cmd>bd!<CR>', { desc = 'Force delete current buffer' })
+vim.keymap.set(
+  'n',
+  '<Leader>bk.',
+  ":<C-u>ibufdo if (bufname() =~ '\\.$') <Bar> bd! <Bar> endifF.a",
+  { desc = 'Force delete all buffers with a given filename extension' }
+)
 vim.keymap.set('n', '<Leader>bkh', '<Cmd>bp<Bar>sp<Bar>bn<Bar>bd!<CR>', { desc = 'then open previous buffer and keep current horizontally split window' })
 vim.keymap.set('n', '<Leader>bkv', '<Cmd>bp<Bar>vsp<Bar>bn<Bar>bd!<CR>', { desc = 'then open previous buffer and keep current vertically split window' })
 vim.keymap.set('n', '<Leader>ch', '<Cmd>che<CR>', { desc = 'Run all healthchecks' })
 vim.keymap.set('n', '<Leader>db', '<Cmd>Alpha<CR>', { desc = "Open alpha.nvim's dashboard buffer" })
 vim.keymap.set(
   'n',
+  '<Leader>eftel',
+  '<Cmd>cd $HOME/.config/emacs/elisp/packages<Bar>ene<Bar>%!echo ";;; ~/.config/emacs/elisp/packages/.el\\n;;;\\n;;; https://github.com/username/repository"<CR>:<C-u>iw .elF.i',
+  { desc = 'an Emacs package-configuration file-template' }
+)
+vim.keymap.set(
+  'n',
   '<Leader>eftp',
-  "<Cmd>cd ~/.config/nvim/lua/custom/plugins<Bar>ene<Bar>%!echo \"-- ~/.config/nvim/lua/custom/plugins/.lua\\n--\\n-- https://github.com/username/repository\\nreturn {\\n  'username/repository',\\n  opts = {},\\n  config = function(_, opts)\\n    require('plugin').setup(opts)\\n  end,\\n}\"<CR>:<C-u>iw .luaF.i",
-  { desc = 'a Neovim plugin file template' }
+  "<Cmd>cd $HOME/.config/nvim/lua/custom/plugins<Bar>ene<Bar>%!echo \"-- ~/.config/nvim/lua/custom/plugins/.lua\\n--\\n-- https://github.com/username/repository\\nreturn {\\n  'username/repository',\\n  opts = {},\\n  config = function(_, opts)\\n    require('plugin').setup(opts)\\n  end,\\n}\"<CR>:<C-u>iw .luaF.i",
+  { desc = 'a Neovim plugin-configuration file-template' }
+)
+vim.keymap.set(
+  'n',
+  '<Leader>eftsty',
+  '<Cmd>cd $HOME/Library/texmf/tex/latex<Bar>ene<Bar>%!echo "\\% ~/Library/texmf/tex/latex/package/package.sty\\n\\NeedsTeXFormat{LaTeX2e}\\n\\ProvidesPackage{package}[2020/00/00 Description]\\n\\n\\\\\\\\endinput"<CR>:<C-u>iw ++p .styF.i',
+  { desc = 'a LaTeX-package file-template' }
 )
 vim.keymap.set('n', '<Leader>j', function()
   local recenter = vim.v.count1 == 1 and 'zz' or (vim.v.count1 - 1) .. 'jzz'
@@ -1292,18 +1318,23 @@ vim.keymap.set(
   ':<C-u>%s;\\vconfig \\= function\\(\\)\\_.{-}require\\(.{-}\\)\\.setup\\((\\{\\_.{-}\\})\\)\\_.{-}end(,)?;opts = \\1\\2',
   { desc = "Replace 'config = function() require(<plugin>).setup({})' with 'opts = {}'" }
 )
-vim.keymap.set('n', '<Leader>prfn', ':<C-u>1s;\\v(/plugins/)@<=.{-}(\\.lua)@=;', { desc = 'Replace filename comment in plugin file template' })
+vim.keymap.set(
+  'n',
+  '<Leader>prfn',
+  ':<C-u>1s;\\v(/plugins/)@<=.{-}(\\.lua)@=;',
+  { desc = 'Replace filename comment in Neovim plugin-configuration file-template' }
+)
 vim.keymap.set(
   'n',
   '<Leader>prit',
   ':<C-u>4,$s;\\v(\\{\\_.)@<=\\_.*(\\})@=;\\=@+',
-  { desc = 'Replace inside of table with clipboard contents in plugin file template' }
+  { desc = 'Replace inside of table with clipboard contents in Neovim plugin-configuration file-template' }
 )
 vim.keymap.set(
   'n',
   '<Leader>prrl',
   ":<C-u>3,4s;\\v(github\\.com/)@<=.{-}($\\_.{-}'(.{-})')@=;\\3",
-  { desc = 'Replace repository link comment in plugin file template' }
+  { desc = 'Replace repository link comment in Neovim plugin-configuration file-template' }
 )
 vim.keymap.set('n', '<Leader>ps', '<Cmd>Screenkey toggle<CR>', { desc = 'Toggle screenkey.nvim plugin' })
 vim.keymap.set('n', '<Leader>qs', function()
@@ -1326,6 +1357,7 @@ vim.keymap.set('n', '<Leader>rfab', ':<C-u>ilet @a=@bFa', { desc = "Fill regis
 vim.keymap.set('n', '<Leader>rr+n', '<Cmd>let @+=substitute(strtrans(@+),"\\^@"," ","g")<CR>', { desc = "Replace newlines in register '+' with spaces" })
 vim.keymap.set('n', '<Leader>rr0n', '<Cmd>let @0=substitute(strtrans(@0),"\\^@"," ","g")<CR>', { desc = "Replace newlines in register '0' with spaces" })
 vim.keymap.set('n', '<Leader>rran', ':<C-u>ilet @a=substitute(strtrans(@a),"\\^@"," ","g")3Fa', { desc = "Replace newlines in register 'a' with spaces" })
+vim.keymap.set('n', '<Leader>styrfn', ':<C-u>i1,3s;\\Cpackage;;gF;i', { desc = 'Replace filename comment in LaTeX package file template' })
 vim.keymap.set('n', '<Leader>tc', '<Cmd>tabc<CR>', { desc = 'Close current tab' })
 vim.keymap.set('n', '<Leader>wc', '<Cmd>clo<CR>', { desc = 'Close current window' })
 

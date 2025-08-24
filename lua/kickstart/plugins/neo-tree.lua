@@ -6,16 +6,55 @@ return {
   version = '*',
   dependencies = {
     'nvim-lua/plenary.nvim',
-    'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
+    'nvim-tree/nvim-web-devicons', -- optional, but recommended
     'MagicDuck/grug-far.nvim',
     'MunifTanjim/nui.nvim',
   },
   lazy = false,
   keys = {
-    { '\\', ':Neotree reveal_force_cwd<CR>', desc = 'Display Neo-tree sidebar and reveal current file without prompting', silent = true },
-    { '<Leader>\\', ':Neotree<CR>', desc = 'Display Neo-tree sidebar of the last directory set as root', silent = true },
+    -- Sources:
+    -- https://github.com/nvim-neo-tree/neo-tree.nvim/discussions/826#discussioncomment-5431757
+    {
+      '\\',
+      function()
+        local manager = require 'neo-tree.sources.manager'
+        local renderer = require 'neo-tree.ui.renderer'
+
+        local state = manager.get_state 'filesystem'
+        local window_exists = renderer.window_exists(state)
+        if window_exists then
+          vim.cmd 'Neotree toggle'
+        else
+          vim.cmd 'Neotree reveal_force_cwd'
+        end
+      end,
+      desc = 'Open Neo-tree filesystem sidebar and reveal current file without prompting if it is closed, and close if otherwise',
+      silent = true,
+    },
+    {
+      '<Leader>\\',
+      '<Cmd>Neotree toggle<CR>',
+      desc = 'Open Neo-tree filesystem sidebar in last directory set as root if it is closed, and close if otherwise',
+      silent = true,
+    },
   },
   opts = {
+    sources = {
+      'filesystem',
+      'buffers',
+      'git_status',
+      'document_symbols',
+    },
+    source_selector = {
+      winbar = true,
+      sources = {
+        { source = 'filesystem', display_name = ' 󰉓 File ' },
+        { source = 'git_status', display_name = ' 󰊢 Git ' },
+        { source = 'buffers', display_name = ' 󰓩 Buf ' },
+        { source = 'document_symbols', display_name = '  Sym ' },
+      },
+      content_layout = 'center',
+    },
     filesystem = {
       bind_to_cwd = true, -- true creates a 2-way binding between vim's cwd and neo-tree's root
       cwd_target = {
@@ -40,10 +79,7 @@ return {
         leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
       },
       window = {
-        mappings = {
-          ['\\'] = 'close_window',
-          ['<Leader><Tab>'] = 'close_window',
-        },
+        mappings = {},
       },
     },
     buffers = {
@@ -82,7 +118,36 @@ return {
     },
     window = {
       mappings = {
-        z = 'grug_far_replace',
+        -- Sources:
+        -- https://github.com/nvim-neo-tree/neo-tree.nvim/discussions/163#discussioncomment-4747082
+        -- https://github.com/nvim-neo-tree/neo-tree.nvim/discussions/163#discussioncomment-7663286
+        -- Jump up to parent directory on file or closed directory, or close on open directory
+        ['\\'] = 'close_window',
+        ['h'] = function(state)
+          local node = state.tree:get_node()
+          if (node.type == 'directory' or node:has_children()) and node:is_expanded() then
+            state.commands.toggle_node(state)
+          else
+            require('neo-tree.ui.renderer').focus_node(state, node:get_parent_id())
+          end
+        end,
+        -- Open on file or closed directory, or jump down to top subdirectory on open directory
+        ['l'] = function(state)
+          local node = state.tree:get_node()
+          if node.type == 'directory' or node:has_children() then
+            if not node:is_expanded() then
+              state.commands.toggle_node(state)
+            else
+              require('neo-tree.ui.renderer').focus_node(state, node:get_child_ids()[1])
+            end
+          else
+            require('neo-tree.sources.filesystem.commands').open(state)
+          end
+        end,
+        ['<Leader><Tab>'] = 'close_window',
+        ['<S-Tab>'] = 'prev_source',
+        ['<Tab>'] = 'next_source',
+        ['z'] = 'grug_far_replace',
       },
     },
   },
