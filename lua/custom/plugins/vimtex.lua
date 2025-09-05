@@ -13,7 +13,7 @@ return {
       executable = 'latexmk',
       options = {
         '-file-line-error',
-        '-interactions=nonstopmode',
+        '-interaction=nonstopmode',
         '-synctex=1',
       },
     }

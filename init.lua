@@ -208,20 +208,20 @@ vim.keymap.set('n', '<Leader>qf', vim.diagnostic.setloclist, { desc = 'Open diag
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
--- TIP: Disable arrow keys in normal mode
-vim.keymap.set('n', '<Left>', '<Cmd>echo "Use h to move!!"<CR>')
-vim.keymap.set('n', '<Right>', '<Cmd>echo "Use l to move!!"<CR>')
-vim.keymap.set('n', '<Up>', '<Cmd>echo "Use k to move!!"<CR>')
-vim.keymap.set('n', '<Down>', '<Cmd>echo "Use j to move!!"<CR>')
+-- TIP: Disable arrow keys in normal and visual modes
+vim.keymap.set({ 'n', 'x' }, '<Down>', '<Cmd>echo "Use j to move!"<CR>')
+vim.keymap.set({ 'n', 'x' }, '<Left>', '<Cmd>echo "Use h to move!"<CR>')
+vim.keymap.set({ 'n', 'x' }, '<Right>', '<Cmd>echo "Use l to move!"<CR>')
+vim.keymap.set({ 'n', 'x' }, '<Up>', '<Cmd>echo "Use k to move!"<CR>')
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
 vim.keymap.set({ 'n', 'x' }, '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set({ 'n', 'x' }, '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set({ 'n', 'x' }, '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set({ 'n', 'x' }, '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+vim.keymap.set({ 'n', 'x' }, '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -1265,6 +1265,12 @@ vim.keymap.set(
   { desc = 'Delete all buffers with a given filename extension' }
 )
 vim.keymap.set('n', '<Leader>bdh', '<Cmd>bp<Bar>sp<Bar>bn<Bar>bd<CR>', { desc = 'then open previous buffer and keep current horizontally split window' })
+vim.keymap.set(
+  'n',
+  '<Leader>bdnt',
+  "<Cmd>bufdo if (bufname() =~ '^\\(term://*\\)\\@!.') <Bar> bd <Bar> endif<CR>",
+  { desc = 'Delete all non-terminal buffers' }
+)
 vim.keymap.set('n', '<Leader>bdv', '<Cmd>bp<Bar>vsp<Bar>bn<Bar>bd<CR>', { desc = 'then open previous buffer and keep current vertically split window' })
 vim.keymap.set('n', '<Leader>bk', '<Cmd>bd!<CR>', { desc = 'Force delete current buffer' })
 vim.keymap.set(
@@ -1274,6 +1280,12 @@ vim.keymap.set(
   { desc = 'Force delete all buffers with a given filename extension' }
 )
 vim.keymap.set('n', '<Leader>bkh', '<Cmd>bp<Bar>sp<Bar>bn<Bar>bd!<CR>', { desc = 'then open previous buffer and keep current horizontally split window' })
+vim.keymap.set(
+  'n',
+  '<Leader>bknt',
+  "<Cmd>bufdo if (bufname() =~ '^\\(term://*\\)\\@!.') <Bar> bd! <Bar> endif<CR>",
+  { desc = 'Force delete all non-terminal buffers' }
+)
 vim.keymap.set('n', '<Leader>bkv', '<Cmd>bp<Bar>vsp<Bar>bn<Bar>bd!<CR>', { desc = 'then open previous buffer and keep current vertically split window' })
 vim.keymap.set('n', '<Leader>ch', '<Cmd>che<CR>', { desc = 'Run all healthchecks' })
 vim.keymap.set('n', '<Leader>db', '<Cmd>Alpha<CR>', { desc = "Open alpha.nvim's dashboard buffer" })
@@ -1360,6 +1372,10 @@ vim.keymap.set('n', '<Leader>rran', ':<C-u>ilet @a=substitute(strtrans(@a),"\\^
 vim.keymap.set('n', '<Leader>styrfn', ':<C-u>i1,3s;\\Cpackage;;gF;i', { desc = 'Replace filename comment in LaTeX package file template' })
 vim.keymap.set('n', '<Leader>tc', '<Cmd>tabc<CR>', { desc = 'Close current tab' })
 vim.keymap.set('n', '<Leader>wc', '<Cmd>clo<CR>', { desc = 'Close current window' })
+vim.keymap.set('n', '<Leader>yap', '<Cmd>let @+=expand("%:p")<CR>', { desc = 'Yank absolute path of current file' })
+vim.keymap.set('n', '<Leader>ydn', '<Cmd>let @+=expand("%:p:h")<CR>', { desc = 'Yank directory name of current file' })
+vim.keymap.set('n', '<Leader>yfn', '<Cmd>let @+=expand("%:t")<CR>', { desc = 'Yank filename of current file' })
+vim.keymap.set('n', '<Leader>yrp', '<Cmd>let @+=expand("%")<CR>', { desc = 'Yank relative path of current file' })
 
 -- Terminal mode
 vim.keymap.set('t', 'kj', '<C-\\><C-n>', { desc = 'Exit terminal mode' })

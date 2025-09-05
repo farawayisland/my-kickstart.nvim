@@ -91,7 +91,50 @@ return {
       },
     },
     commands = {
-      -- create a new neo-tree command
+      -- Sources:
+      -- https://github.com/MagicDuck/grug-far.nvim?tab=readme-ov-file#add-neo-tree-integration-to-open-search-limited-to-focused-directory-or-file
+      -- https://github.com/nvim-neo-tree/neo-tree.nvim/discussions/370#discussioncomment-6679447
+      --
+      -- Copy path or name of file or directory under cursor
+      copy_selector = function(state)
+        local node = state.tree:get_node()
+        local filepath = node:get_id()
+        local filename = node.name
+        local modify = vim.fn.fnamemodify
+
+        local vals = {
+          ['BASENAME'] = modify(filename, ':r'),
+          ['EXTENSION'] = modify(filename, ':e'),
+          ['FILENAME'] = filename,
+          ['PATH (CWD)'] = modify(filepath, ':.'),
+          ['PATH (HOME)'] = modify(filepath, ':~'),
+          ['PATH'] = filepath,
+          ['URI'] = vim.uri_from_fname(filepath),
+        }
+
+        local options = vim.tbl_filter(function(val)
+          return vals[val] ~= ''
+        end, vim.tbl_keys(vals))
+        if vim.tbl_isempty(options) then
+          vim.notify('No values to copy', vim.log.levels.WARN)
+          return
+        end
+        table.sort(options)
+        vim.ui.select(options, {
+          prompt = 'Choose to copy to clipboard:',
+          format_item = function(item)
+            return ('%s: %s'):format(item, vals[item])
+          end,
+        }, function(choice)
+          local result = vals[choice]
+          if result then
+            vim.notify(('Copied: `%s`'):format(result))
+            vim.fn.setreg('+', result)
+          end
+        end)
+      end,
+      --
+      -- Add neo-tree integration to open search limited to focused directory or file
       grug_far_replace = function(state)
         local node = state.tree:get_node()
         local prefills = {
@@ -121,6 +164,7 @@ return {
         -- Sources:
         -- https://github.com/nvim-neo-tree/neo-tree.nvim/discussions/163#discussioncomment-4747082
         -- https://github.com/nvim-neo-tree/neo-tree.nvim/discussions/163#discussioncomment-7663286
+        --
         -- Jump up to parent directory on file or closed directory, or close on open directory
         ['\\'] = 'close_window',
         ['h'] = function(state)
@@ -147,6 +191,7 @@ return {
         ['<Leader><Tab>'] = 'close_window',
         ['<S-Tab>'] = 'prev_source',
         ['<Tab>'] = 'next_source',
+        ['Y'] = 'copy_selector',
         ['z'] = 'grug_far_replace',
       },
     },
