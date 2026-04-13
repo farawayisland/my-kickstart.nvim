@@ -157,4 +157,4 @@ return {
     end,
   },
 }
--- vim: ts=2 sts=2 sw=2 et
+-- vim: et sts=2 sw=2 ts=2
