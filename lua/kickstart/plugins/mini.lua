@@ -1,3 +1,4 @@
+-- ~/.config/nvims/kickstart/lua/kickstart/plugins/mini.lua
 ---@module 'lazy'
 ---@type LazySpec
 return {

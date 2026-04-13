@@ -1,3 +1,4 @@
+-- ~/.config/nvims/kickstart/lua/kickstart/plugins/telescope.lua
 -- NOTE: Plugins can specify dependencies.
 --
 -- The dependencies are proper plugin specifications as well - anything

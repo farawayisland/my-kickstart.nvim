@@ -1,3 +1,4 @@
+-- ~/.config/nvims/kickstart/lua/kickstart/plugins/todo-comments.lua
 -- Highlight todo, notes, etc in comments
 ---@module 'lazy'
 ---@type LazySpec

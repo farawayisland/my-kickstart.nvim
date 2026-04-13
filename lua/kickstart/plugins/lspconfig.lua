@@ -1,3 +1,4 @@
+-- ~/.config/nvims/kickstart/lua/kickstart/plugins/lspconfig.lua
 -- LSP Plugins
 ---@module 'lazy'
 ---@type LazySpec

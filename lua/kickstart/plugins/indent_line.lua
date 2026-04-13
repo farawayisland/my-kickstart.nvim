@@ -1,3 +1,4 @@
+-- ~/.config/nvims/kickstart/lua/kickstart/plugins/indent_line.lua
 -- Add indentation guides even on blank lines
 
 ---@module 'lazy'

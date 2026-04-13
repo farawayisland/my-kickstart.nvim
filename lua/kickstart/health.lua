@@ -1,3 +1,4 @@
+-- ~/.config/nvims/kickstart/lua/kickstart/health.lua
 --[[
 --
 -- This file is not required for your own configuration,

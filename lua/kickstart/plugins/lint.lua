@@ -1,3 +1,4 @@
+-- ~/.config/nvims/kickstart/lua/kickstart/plugins/lint.lua
 -- Linting
 
 ---@module 'lazy'

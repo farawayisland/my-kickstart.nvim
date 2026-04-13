@@ -1,3 +1,4 @@
+-- ~/.config/nvims/kickstart/lua/kickstart/plugins/gitsigns.lua
 -- Alternatively, use `config = function() ... end` for full control over the configuration.
 -- If you prefer to call `setup` explicitly, use:
 --    {

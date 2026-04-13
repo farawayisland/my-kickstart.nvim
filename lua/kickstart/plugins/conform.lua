@@ -1,3 +1,4 @@
+-- ~/.config/nvims/kickstart/lua/kickstart/plugins/conform.lua
 ---@module 'lazy'
 ---@type LazySpec
 return {

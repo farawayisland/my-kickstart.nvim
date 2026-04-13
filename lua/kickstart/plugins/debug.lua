@@ -1,3 +1,4 @@
+-- ~/.config/nvims/kickstart/lua/kickstart/plugins/debug.lua
 -- debug.lua
 --
 -- Shows how to use the DAP plugin to debug your code.

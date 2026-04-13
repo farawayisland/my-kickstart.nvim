@@ -1,3 +1,4 @@
+-- ~/.config/nvims/kickstart/lua/kickstart/plugins/autopairs.lua
 -- autopairs
 -- https://github.com/windwp/nvim-autopairs
 
