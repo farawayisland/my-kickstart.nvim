@@ -1,5 +1,5 @@
--- ~/.config/nvims/kickstart/lua/keymaps.lua
--- [[ Basic Keymaps ]]
+-- ~/.config/nvims/kickstart/lua/keymaps/basic.lua
+-- [[ Basic keymaps ]]
 --  See `:help vim.keymap.set()`
 
 -- Clear highlights on search when pressing <Esc> in normal mode

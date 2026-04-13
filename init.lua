@@ -96,14 +96,17 @@ vim.g.have_nerd_font = true
 -- [[ Setting options ]]
 require 'options'
 
--- [[ Basic Keymaps ]]
-require 'keymaps'
+-- [[ Basic keymaps ]]
+require 'keymaps.basic'
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 require 'lazy-bootstrap'
 
 -- [[ Configure and install plugins ]]
 require 'lazy-plugins'
+
+-- [[ Additional keymaps ]]
+require 'keymaps'
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: et sts=2 sw=2 ts=2
