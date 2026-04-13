@@ -4,17 +4,40 @@
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
 
+-- Indentation
+vim.o.expandtab = true
+vim.o.shiftwidth = 2
+vim.o.softtabstop = 2
+vim.o.tabstop = 2
+
+-- Fillchars
+vim.o.fillchars = 'fold: '
+
 -- Make line numbers default
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
 
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
+
+-- Set clipboard (`pbcopy` and `pbpaste` by default on macOS)
+-- vim.g.clipboard = {
+--   name = 'xsel',
+--   copy = {
+--     ['+'] = 'xsel --nodetach -ib',
+--     ['*'] = 'xsel --nodetach -ip',
+--   },
+--   paste = {
+--     ['+'] = 'xsel -ob',
+--     ['*'] = 'xsel -op',
+--   },
+--   cache_enabled = true,
+-- }
 
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
@@ -54,7 +77,7 @@ vim.o.splitbelow = true
 --   See `:help lua-options`
 --   and `:help lua-guide-options`
 vim.o.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.opt.listchars = { nbsp = '␣', tab = '▎ ', trail = '·' }
 
 -- Preview substitutions live, as you type!
 vim.o.inccommand = 'split'
@@ -62,12 +85,23 @@ vim.o.inccommand = 'split'
 -- Show which line your cursor is on
 vim.o.cursorline = true
 
--- Minimal number of screen lines to keep above and below the cursor.
-vim.o.scrolloff = 10
+-- Number of lines to scroll with Ctrl-u and Ctrl-d commands
+vim.api.nvim_create_autocmd('BufEnter', {
+  group = vim.api.nvim_create_augroup('set-scroll-value', { clear = true }),
+  pattern = { '*.*' },
+  desc = "Set 'scroll' value to 5 instead of half of window height",
+  callback = function() vim.o.scroll = 5 end,
+})
 
--- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
+-- Minimal number of screen lines to keep above and below the cursor
+vim.o.scrolloff = 3
+
+-- If performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
 vim.o.confirm = true
+
+-- Enable line wrapping
+vim.o.wrap = true
 
 -- vim: et sts=2 sw=2 ts=2
