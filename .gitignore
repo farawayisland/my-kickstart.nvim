@@ -1,9 +1,4 @@
-tags
-test.sh
-.luarc.json
-nvim
-
-spell/
+.DS_Store
 
 # In your personal fork, you likely want to comment this, since it's recommended to track
 # lazy-lock.json in version control - see https://lazy.folke.io/usage/lockfile
@@ -11,4 +6,8 @@ spell/
 # merge conflicts.
 lazy-lock.json
 
-.DS_Store
+.luarc.json
+nvim
+spell/
+tags
+test.sh
