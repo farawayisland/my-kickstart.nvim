@@ -1,4 +1,10 @@
 -- ~/.config/nvims/kickstart/lua/kickstart/plugins/treesitter.lua
+-- Nvim Treesitter configurations and abstraction layer
+-- https://github.com/nvim-treesitter/nvim-treesitter
+-- Show code context
+-- https://github.com/nvim-treesitter/nvim-treesitter-context
+-- Syntax aware text-objects, select, move, swap, and peek support
+-- https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 ---@module 'lazy'
 ---@type LazySpec
 return {
@@ -139,6 +145,60 @@ return {
         end,
       })
     end,
+  },
+  {
+    'nvim-treesitter/nvim-treesitter-context',
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter',
+      event = 'BufRead',
+    },
+    event = 'BufRead',
+    ---@module 'nvim-treesitter-context'
+    opts = {
+      multiwindow = true,
+    },
+    keys = {
+      { mode = { 'n', 'x' }, '<Leader>cn', '<Cmd>TSContext toggle<CR>', desc = 'Toggle code context' },
+      { mode = { 'n', 'x' }, '[c', function() require('treesitter-context').go_to_context(vim.v.count1) end, desc = 'Jump to context', silent = true },
+    },
+  },
+  {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    branch = 'main',
+    ---@module 'nvim-treesitter-textobjects'
+    opts = { multiwindow = true },
+    keys = {
+      {
+        'ac',
+        function() require('nvim-treesitter-textobjects.select').select_textobject('@class.outer', 'textobjects') end,
+        desc = 'Select outer class',
+        mode = { 'o', 'x' },
+      },
+      {
+        'af',
+        function() require('nvim-treesitter-textobjects.select').select_textobject('@function.outer', 'textobjects') end,
+        desc = 'Select outer function',
+        mode = { 'o', 'x' },
+      },
+      {
+        'as',
+        function() require('nvim-treesitter-textobjects.select').select_textobject('@local.scope', 'locals') end,
+        desc = 'Select local scope',
+        mode = { 'o', 'x' },
+      },
+      {
+        'ic',
+        function() require('nvim-treesitter-textobjects.select').select_textobject('@class.inner', 'textobjects') end,
+        desc = 'Select inner class',
+        mode = { 'o', 'x' },
+      },
+      {
+        'if',
+        function() require('nvim-treesitter-textobjects.select').select_textobject('@function.inner', 'textobjects') end,
+        desc = 'Select inner function',
+        mode = { 'o', 'x' },
+      },
+    },
   },
 }
 
