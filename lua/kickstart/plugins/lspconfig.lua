@@ -174,9 +174,9 @@ return {
       --
       -- You can press `g?` for help in this menu.
       local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, {
-        -- You can add other tools here that you want Mason to install
-      })
+      local non_ls_packages = require 'external-packages.non-ls'
+      -- You can add to `external-packages/non-ls.lua` other tools that you want Mason to install
+      vim.list_extend(ensure_installed, non_ls_packages)
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -187,4 +187,5 @@ return {
     end,
   },
 }
+
 -- vim: et sts=2 sw=2 ts=2
