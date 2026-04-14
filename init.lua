@@ -108,5 +108,8 @@ require 'lazy-plugins'
 -- [[ Additional keymaps ]]
 require 'keymaps'
 
+-- [[ Autocommands ]]
+require 'autocommands'
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: et sts=2 sw=2 ts=2
