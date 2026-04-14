@@ -66,14 +66,31 @@ return {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<C-CR>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
-        -- pickers = {}
+        defaults = {
+          mappings = {
+            i = {
+              -- ['<C-CR>'] = 'to_fuzzy_refine',
+              ['<C-BS>'] = function() vim.cmd 'exe "norm! i\\<C-u>"' end,
+              ['<Leader>P'] = function() vim.cmd 'exe "norm! i\\<C-r>0"' end,
+              ['<Leader>PP'] = function() vim.cmd 'exe "norm! i\\<C-r>+"' end,
+            },
+          },
+        },
         extensions = {
           ['ui-select'] = { require('telescope.themes').get_dropdown() },
+        },
+        pickers = {
+          find_files = {
+            find_command = { 'rg', '--color', 'never', '--files', '--glob', '!**/.git/*' },
+            follow = true,
+            hidden = true,
+          },
+          grep_string = {
+            additional_args = { '--follow', '--glob', '!**/.git/*', '--hidden' },
+          },
+          live_grep = {
+            additional_args = { '--follow', '--glob', '!**/.git/*', '--hidden' },
+          },
         },
       }
 
@@ -157,4 +174,5 @@ return {
     end,
   },
 }
+
 -- vim: et sts=2 sw=2 ts=2
