@@ -46,7 +46,7 @@ require('lazy').setup({
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following lines and add your plugins to `lua/custom/plugins/**/*.lua` to get going.
-  require 'custom.plugins.colorschemes.tokyonight',
+  { import = 'custom.plugins.colorschemes' },
   -- { import = 'custom.plugins.graphics' },
   -- { import = 'custom.plugins.greeters' },
   -- { import = 'custom.plugins.kitty' },
