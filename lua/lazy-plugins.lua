@@ -52,7 +52,7 @@ require('lazy').setup({
   -- { import = 'custom.plugins.kitty' },
   -- { import = 'custom.plugins.motions' },
   -- { import = 'custom.plugins.screencasting' },
-  -- { import = 'custom.plugins.session-management' },
+  { import = 'custom.plugins.session-management' },
   -- { import = 'custom.plugins.tex' },
 
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
