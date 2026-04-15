@@ -48,7 +48,7 @@ require('lazy').setup({
   --  Uncomment the following lines and add your plugins to `lua/custom/plugins/**/*.lua` to get going.
   { import = 'custom.plugins.colorschemes' },
   { import = 'custom.plugins.graphics' },
-  -- { import = 'custom.plugins.greeters' },
+  { import = 'custom.plugins.greeters' },
   -- { import = 'custom.plugins.kitty' },
   -- { import = 'custom.plugins.motions' },
   -- { import = 'custom.plugins.screencasting' },
