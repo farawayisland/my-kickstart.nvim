@@ -1,3 +1,4 @@
+-- ~/.config/nvims/kickstart/lua/keymaps/troubleshooting.lua
 -- [[ Troubleshooting ]]
 -- In normal- and visual-modes
 --- Healthchecks

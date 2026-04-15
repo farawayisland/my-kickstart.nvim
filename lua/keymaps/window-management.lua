@@ -1,3 +1,4 @@
+-- ~/.config/nvims/kickstart/lua/keymaps/window-management.lua
 -- [[ Window management ]]
 -- In normal- and visual-modes
 --- Window-closing
