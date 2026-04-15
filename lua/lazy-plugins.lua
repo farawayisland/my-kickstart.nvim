@@ -24,7 +24,6 @@ require('lazy').setup({
   require 'kickstart.plugins.mini',
   require 'kickstart.plugins.telescope',
   require 'kickstart.plugins.todo-comments',
-  require 'kickstart.plugins.tokyonight',
   require 'kickstart.plugins.treesitter',
   require 'kickstart.plugins.which-key',
 
@@ -47,6 +46,7 @@ require('lazy').setup({
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following lines and add your plugins to `lua/custom/plugins/**/*.lua` to get going.
+  require 'custom.plugins.colorschemes.tokyonight',
   -- { import = 'custom.plugins.graphics' },
   -- { import = 'custom.plugins.greeters' },
   -- { import = 'custom.plugins.kitty' },
