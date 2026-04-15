@@ -51,7 +51,7 @@ require('lazy').setup({
   { import = 'custom.plugins.greeters' },
   { import = 'custom.plugins.kitty' },
   { import = 'custom.plugins.motions' },
-  -- { import = 'custom.plugins.screencasting' },
+  { import = 'custom.plugins.screencasting' },
   { import = 'custom.plugins.session-management' },
   -- { import = 'custom.plugins.tex' },
 
